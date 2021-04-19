@@ -4,6 +4,7 @@ import { initStore } from "./store";
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const OS = process.platform;
+console.log(OS);
 
 let mainWindow:null|electron.BrowserWindow;
 
@@ -16,16 +17,18 @@ const createWindow = () =>{
         }
     });
     mainWindow.loadURL(`file://${__dirname}/index.html`);
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
+    if(OS === "win32"){
+        mainWindow?.webContents.on("did-finish-load",()=>{
+            process.argv.forEach((arg,i)=>{
+                if(i===0)return;
+                mainWindow?.webContents.send("dropFile",arg);
+            })
+        });
+    }
     mainWindow.on("closed",()=>{
         mainWindow = null;
     }); 
-    if(OS === "win32"){
-        console.log(process.argv);
-        if(process.argv){
-            console.log("fire");
-        }
-    }
 }
 
 if(OS === "darwin"){
