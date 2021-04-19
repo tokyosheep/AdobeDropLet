@@ -9,6 +9,7 @@ console.log(OS);
 let mainWindow:null|electron.BrowserWindow;
 
 initStore();
+
 const createWindow = () =>{
     mainWindow = new BrowserWindow({width:500,height:400,
         webPreferences:{
@@ -52,7 +53,28 @@ if(OS === "darwin"){
     })
 }
 
+const gotTheLock = app.requestSingleInstanceLock();
 
-app.on("ready",()=>{
-    createWindow();
-});
+if(OS === "win32"){
+    if(!gotTheLock){
+        app.quit();
+    }else{
+        app.on('second-instance', (event, commandLine, workingDirectory) => {
+            // Someone tried to run a second instance, we should focus our window.
+            commandLine.forEach((arg,i)=>{
+                if(i===0)return;
+                mainWindow?.webContents.send("dropFile",arg);
+            })
+        });
+
+        app.on("ready",()=>{
+            createWindow();
+        });
+   }
+}else{
+    app.on("ready",()=>{
+        createWindow();
+    });
+}
+
+

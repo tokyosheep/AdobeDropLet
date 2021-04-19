@@ -3903,9 +3903,30 @@ if (OS === "darwin") {
   });
 }
 
-app.on("ready", function () {
-  createWindow();
-});
+var gotTheLock = app.requestSingleInstanceLock();
+
+if (OS === "win32") {
+  if (!gotTheLock) {
+    app.quit();
+  } else {
+    app.on('second-instance', function (event, commandLine, workingDirectory) {
+      // Someone tried to run a second instance, we should focus our window.
+      commandLine.forEach(function (arg, i) {
+        var _mainWindow7;
+
+        if (i === 0) return;
+        (_mainWindow7 = mainWindow) === null || _mainWindow7 === void 0 ? void 0 : _mainWindow7.webContents.send("dropFile", arg);
+      });
+    });
+    app.on("ready", function () {
+      createWindow();
+    });
+  }
+} else {
+  app.on("ready", function () {
+    createWindow();
+  });
+}
 
 /***/ }),
 

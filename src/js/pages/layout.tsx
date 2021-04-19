@@ -13,6 +13,8 @@ import { StoreData } from "../../../main/store";
 import AiPage from "./AIPage";
 import { StateType } from "../redux/stateType";
 
+const OS = process.platform;
+
 const GlobalStyle = createGlobalStyle`
     body{
         margin: 0;
@@ -40,12 +42,16 @@ const Layout = () =>{
             ));
         })();
 
-        connectServer(async(r)=>{
-            console.log(r);
-            dispatch(actionsAI_set(r));
-            dispatch(selectedAI_set({name:r[0].setName,index:0},{name:r[0].actions[0],index:0}));
-            await ipcRenderer.invoke("saveData",r);
-        });
+        try{
+            connectServer(async(r)=>{
+                console.log(r);
+                dispatch(actionsAI_set(r));
+                dispatch(selectedAI_set({name:r[0].setName,index:0},{name:r[0].actions[0],index:0}));
+                await ipcRenderer.invoke("saveData",r);
+            });
+        }catch(e){
+            console.log(e);
+        }
     },[]);
 
     const received = async(event,message)=>{
