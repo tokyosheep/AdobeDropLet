@@ -26,6 +26,9 @@
       }
     }
   },
+  "win": {
+    "icon": "icon/icons/win/icon.ico"
+  },
   "main": "index.js",
   "scripts": {
     "build": "webpack",

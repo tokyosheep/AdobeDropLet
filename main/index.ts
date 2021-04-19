@@ -3,6 +3,7 @@ import { initStore } from "./store";
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const OS = process.platform;
 
 let mainWindow:null|electron.BrowserWindow;
 
@@ -18,27 +19,36 @@ const createWindow = () =>{
     //mainWindow.webContents.openDevTools();
     mainWindow.on("closed",()=>{
         mainWindow = null;
-    });
+    }); 
+    if(OS === "win32"){
+        console.log(process.argv);
+        if(process.argv){
+            console.log("fire");
+        }
+    }
 }
 
-app.on("will-finish-launching",()=>{
-    app.on("open-file",(event,filePath)=>{
-        event.preventDefault();
-        if(mainWindow){
-            mainWindow?.webContents.send("dropFile",filePath);
-        }else{
-            app.on("ready",()=>{
-                mainWindow?.webContents.on("did-finish-load",()=>{
-                    mainWindow?.webContents.send("dropFile",filePath);
-                    setTimeout(()=>{
-                        mainWindow?.close();
-                        mainWindow = null;
-                    },2000);
+if(OS === "darwin"){
+    app.on("will-finish-launching",()=>{
+        app.on("open-file",(event,filePath)=>{
+            event.preventDefault();
+            if(mainWindow){
+                mainWindow?.webContents.send("dropFile",filePath);
+            }else{
+                app.on("ready",()=>{
+                    mainWindow?.webContents.on("did-finish-load",()=>{
+                        mainWindow?.webContents.send("dropFile",filePath);
+                        setTimeout(()=>{
+                            mainWindow?.close();
+                            mainWindow = null;
+                        },2000);
+                    });
                 });
-            });
-        }
+            }
+        })
     })
-})
+}
+
 
 app.on("ready",()=>{
     createWindow();
