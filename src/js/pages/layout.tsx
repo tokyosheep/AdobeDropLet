@@ -42,16 +42,12 @@ const Layout = () =>{
             ));
         })();
 
-        try{
-            connectServer(async(r)=>{
-                console.log(r);
-                dispatch(actionsAI_set(r));
-                dispatch(selectedAI_set({name:r[0].setName,index:0},{name:r[0].actions[0],index:0}));
-                await ipcRenderer.invoke("saveData",r);
-            });
-        }catch(e){
-            console.log(e);
-        }
+        connectServer(async(r)=>{
+            console.log(r);
+            dispatch(actionsAI_set(r));
+            dispatch(selectedAI_set({name:r[0].setName,index:0},{name:r[0].actions[0],index:0}));
+            await ipcRenderer.invoke("saveData",r);
+        });
     },[]);
 
     const received = async(event,message)=>{

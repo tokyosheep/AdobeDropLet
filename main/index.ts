@@ -18,7 +18,7 @@ const createWindow = () =>{
         }
     });
     mainWindow.loadURL(`file://${__dirname}/index.html`);
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
     if(OS === "win32"){
         mainWindow?.webContents.on("did-finish-load",()=>{
             process.argv.forEach((arg,i)=>{

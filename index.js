@@ -3852,8 +3852,7 @@ var createWindow = function createWindow() {
       contextIsolation: false
     }
   });
-  mainWindow.loadURL("file://".concat(__dirname, "/index.html"));
-  mainWindow.webContents.openDevTools();
+  mainWindow.loadURL("file://".concat(__dirname, "/index.html")); //mainWindow.webContents.openDevTools();
 
   if (OS === "win32") {
     var _mainWindow;

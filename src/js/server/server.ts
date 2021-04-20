@@ -35,7 +35,6 @@ const connectServer:(receiveDropped:(r:ActionType[])=>void)=>void = receiveDropp
             break;
         }
     });
-
     server.listen(ElectronURL);
 }
 
