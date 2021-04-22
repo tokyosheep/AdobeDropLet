@@ -13,7 +13,7 @@
     and push the button get action. and then electron'll receive actions data
 </p>
 
-<img src="./mdImg/electronSide">
+<img src="./mdImg/electronSide.png">
 
 <h3>how to use this app</h3>
 
